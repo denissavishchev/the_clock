@@ -78,6 +78,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  flutter_scroll_shadow:
+    dependency: "direct main"
+    description:
+      name: flutter_scroll_shadow
+      sha256: "0e6e3c23ae81d892a2cc106156ff94c7b5c1cb1ec4c71608b4565a35aaed0d49"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
