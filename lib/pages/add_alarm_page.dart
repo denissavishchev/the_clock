@@ -406,7 +406,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                   ),
                   GestureDetector(
                     onTap: (){
-                      print('label');
+
                     },
                     child: NeuRectWidget(
                       padding: 12,
