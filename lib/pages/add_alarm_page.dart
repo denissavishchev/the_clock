@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:the_clock/models/alarm_model.dart';
+import 'package:the_clock/models/boxes.dart';
+import 'package:the_clock/pages/alarm_page.dart';
 import 'package:the_clock/pages/main_page.dart';
 import 'package:the_clock/widgets/neu_rect_widget.dart';
 import 'package:the_clock/widgets/ringtone_widget.dart';
@@ -19,6 +22,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
 
   bool _deleteAfter = true;
   String _repeatAlarm = 'Once';
+  String _label = 'Enter label';
   late String _ringtone = sounds[0];
 
   final Map<String, bool> _daysOfWeek = {
@@ -47,6 +51,22 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
 
   late FixedExtentScrollController _minController;
   late FixedExtentScrollController _hourController;
+  late TextEditingController _labelController;
+
+  void addAlarm() {
+    final alarms = AlarmModel()
+        ..hour = hour
+        ..minute = minute
+        ..ringtone = _ringtone
+        ..repeat = _repeatAlarm
+        ..days = _daysOfWeek
+        ..deleteAfter = _deleteAfter
+        ..label = _label;
+
+      final box = Boxes.addAlarmToBase();
+      box.put('2', alarms);
+
+  }
 
   String timeUntil() {
     DateTime now = DateTime.now();
@@ -195,11 +215,87 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                               updateRingtone(sounds[index]);
                             },
                             isChecked: _ringtone == sounds[index],
-                            isPlaying: player.playing, ),
+                            ),
                       );
                       })
                 );
               }
+          );
+        });
+  }
+
+  Future labelWindow() {
+    return showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Container(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      decoration: const BoxDecoration(
+                          color: Color(0xffe9f1f9),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
+                          )
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          NeuRectWidget(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: TextField(
+                                    controller: _labelController,
+                                    cursorColor: fontColor,
+                                    autofocus: true,
+                                    style: const TextStyle(fontSize: 24),
+                                    decoration: const InputDecoration(
+                                      isCollapsed: true,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent)
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent)
+                                      )
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ),
+                          const SizedBox(height: 15,),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const SizedBox(width: 50,),
+                                GestureDetector(
+                                  onTap: (){
+                                    updateLabel(_labelController.text);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: NeuRoundWidget(
+                                    size: 50,
+                                    padding: 14,
+                                    child: Image.asset('assets/images/ok.png'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                  );
+                }
+            ),
           );
         });
   }
@@ -216,10 +312,17 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
     });
   }
 
+  void updateLabel(String label) {
+    setState(() {
+      _label = label;
+    });
+  }
+
   @override
   void initState() {
     _minController = FixedExtentScrollController();
     _hourController = FixedExtentScrollController();
+    _labelController = TextEditingController();
     super.initState();
   }
 
@@ -227,208 +330,217 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xffe9f1f9),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  NeuRoundWidget(
-                      onPress: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const MainPage()));
-                      },
-                      size: 50,
-                      padding: 14,
-                      child: Image.asset('assets/images/cancel.png')),
-                  Text('Alarm in ${timeUntil()}', style: textStyle,),
-                  NeuRoundWidget(
-                      onPress: () {
-
-                      },
-                      size: 50,
-                      padding: 14,
-                      child: Image.asset('assets/images/ok.png')),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 100,
-                    child: ScrollConfiguration(
-                      behavior: const ScrollBehavior().copyWith(overscroll: false),
-                      child: ListWheelScrollView.useDelegate(
-                        controller: _hourController,
-                        itemExtent: 60,
-                        perspective: 0.005,
-                        diameterRatio: 2.5,
-                        onSelectedItemChanged: (value){
-                          setState(() {
-                            hour = value;
-                          });
-                        },
-                        physics: const FixedExtentScrollPhysics(),
-                        childDelegate: ListWheelChildBuilderDelegate(
-                          childCount: 24,
-                          builder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: Center(
-                                child: Text(
-                                    index < 10 ? '0$index' : index.toString(),
-                                    style: timeStyle),
-                              ),
-                            );
-                          }
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: size.height * 0.95,
+            child: Column( 
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      NeuRoundWidget(
+                          onPress: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const MainPage()));
+                          },
+                          size: 50,
+                          padding: 14,
+                          child: Image.asset('assets/images/cancel.png')),
+                      Text('Alarm in ${timeUntil()}', style: textStyle,),
+                      NeuRoundWidget(
+                          onPress: () {
+                            addAlarm();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const AlarmPage()));
+                          },
+                          size: 50,
+                          padding: 14,
+                          child: Image.asset('assets/images/ok.png')),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 100,
+                        child: ScrollConfiguration(
+                          behavior: const ScrollBehavior().copyWith(overscroll: false),
+                          child: ListWheelScrollView.useDelegate(
+                            controller: _hourController,
+                            itemExtent: 60,
+                            perspective: 0.005,
+                            diameterRatio: 2.5,
+                            onSelectedItemChanged: (value){
+                              setState(() {
+                                hour = value;
+                              });
+                            },
+                            physics: const FixedExtentScrollPhysics(),
+                            childDelegate: ListWheelChildBuilderDelegate(
+                              childCount: 24,
+                              builder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  child: Center(
+                                    child: Text(
+                                        index < 10 ? '0$index' : index.toString(),
+                                        style: timeStyle),
+                                  ),
+                                );
+                              }
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 50),
-                  SizedBox(width: 100,
-                    child: ScrollConfiguration(
-                      behavior: const ScrollBehavior().copyWith(overscroll: false),
-                      child: ListWheelScrollView.useDelegate(
-                        controller: _minController,
-                        itemExtent: 60,
-                        perspective: 0.005,
-                        diameterRatio: 2.5,
-                        onSelectedItemChanged: (value){
-                          setState(() {
-                            minute = value;
-                          });
-                        },
-                        physics: const FixedExtentScrollPhysics(),
-                        childDelegate: ListWheelChildBuilderDelegate(
-                          childCount: 60,
-                          builder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: Center(
-                                child: Text(
-                                    index < 10 ? '0$index' : index.toString(),
-                                    style: timeStyle),
-                              ),
-                            );
-                          }
+                      const SizedBox(width: 50),
+                      SizedBox(width: 100,
+                        child: ScrollConfiguration(
+                          behavior: const ScrollBehavior().copyWith(overscroll: false),
+                          child: ListWheelScrollView.useDelegate(
+                            controller: _minController,
+                            itemExtent: 60,
+                            perspective: 0.005,
+                            diameterRatio: 2.5,
+                            onSelectedItemChanged: (value){
+                              setState(() {
+                                minute = value;
+                              });
+                            },
+                            physics: const FixedExtentScrollPhysics(),
+                            childDelegate: ListWheelChildBuilderDelegate(
+                              childCount: 60,
+                              builder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  child: Center(
+                                    child: Text(
+                                        index < 10 ? '0$index' : index.toString(),
+                                        style: timeStyle),
+                                  ),
+                                );
+                              }
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const SizedBox(height: 10,),
+                      GestureDetector(
+                        onTap: (){
+                          ringtoneWindow();
+                        },
+                        child: NeuRectWidget(
+                          padding: 12,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Ringtone',
+                                style: textStyle),
+                              Row(
+                                children: [
+                                  Text(_ringtone, style: helpTextStyle,),
+                                  Icon(Icons.arrow_forward_ios, size: 16, color: fontColor.withOpacity(0.7))
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          repeatWindow();
+                        },
+                        child: NeuRectWidget(
+                          padding: 12,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Repeat', style: textStyle),
+                              Row(
+                                children: [
+                                  Text(_repeatAlarm, style: helpTextStyle,),
+                                  Icon(Icons.arrow_forward_ios, size: 16, color: fontColor.withOpacity(0.7))
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      NeuRectWidget(
+                        padding: 12,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Delete after goes off', style: textStyle),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.white,
+                                        blurRadius: 10,
+                                        offset: Offset(-5, -5)),
+                                    BoxShadow(
+                                        color: Color(0xFFc9d7e6),
+                                        blurRadius: 10,
+                                        offset: Offset(5, 5)),
+                                  ]),
+                              child: CupertinoSwitch(
+                                  trackColor: const Color(0xffdee8f1),
+                                  thumbColor: const Color(0xff31466a),
+                                  activeColor: const Color(0xFFc9d7e6),
+                                  value: _deleteAfter,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _deleteAfter = value;
+                                    });
+                                  }),
+                            )
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          labelWindow();
+                        },
+                        child: NeuRectWidget(
+                          padding: 12,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Label', style: textStyle),
+                              Row(
+                                children: [
+                                  Text(_label, style: helpTextStyle,),
+                                  Icon(Icons.arrow_forward_ios, size: 16, color: fontColor.withOpacity(0.7),)
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const SizedBox(height: 10,),
-                  GestureDetector(
-                    onTap: (){
-                      ringtoneWindow();
-                    },
-                    child: NeuRectWidget(
-                      padding: 12,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Ringtone',
-                            style: textStyle),
-                          Row(
-                            children: [
-                              Text(_ringtone, style: helpTextStyle,),
-                              Icon(Icons.arrow_forward_ios, size: 16, color: fontColor.withOpacity(0.7))
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      repeatWindow();
-                    },
-                    child: NeuRectWidget(
-                      padding: 12,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Repeat', style: textStyle),
-                          Row(
-                            children: [
-                              Text(_repeatAlarm, style: helpTextStyle,),
-                              Icon(Icons.arrow_forward_ios, size: 16, color: fontColor.withOpacity(0.7))
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  NeuRectWidget(
-                    padding: 12,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Delete after goes off', style: textStyle),
-                        Container(
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(16)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.white,
-                                    blurRadius: 10,
-                                    offset: Offset(-5, -5)),
-                                BoxShadow(
-                                    color: Color(0xFFc9d7e6),
-                                    blurRadius: 10,
-                                    offset: Offset(5, 5)),
-                              ]),
-                          child: CupertinoSwitch(
-                              trackColor: const Color(0xffdee8f1),
-                              thumbColor: const Color(0xff31466a),
-                              activeColor: const Color(0xFFc9d7e6),
-                              value: _deleteAfter,
-                              onChanged: (value) {
-                                setState(() {
-                                  _deleteAfter = value;
-                                });
-                              }),
-                        )
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-
-                    },
-                    child: NeuRectWidget(
-                      padding: 12,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Label', style: textStyle),
-                          Row(
-                            children: [
-                              Text('Enter label', style: helpTextStyle,),
-                              Icon(Icons.arrow_forward_ios, size: 16, color: fontColor.withOpacity(0.7),)
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10,),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:the_clock/pages/alarm_page.dart';
 import 'package:the_clock/pages/clock_page.dart';
 import 'package:the_clock/pages/stop_page.dart';
 import 'package:the_clock/pages/timer_page.dart';
+import 'package:hive/hive.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -12,6 +13,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
 
   final PageController _pageController = PageController(initialPage: 0);
 

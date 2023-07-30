@@ -9,14 +9,13 @@ class RingtoneWidget extends StatelessWidget {
     required this.name,
     required this.onPress,
     required this.isChecked,
-    required this.onTap, required this.isPlaying,
+    required this.onTap,
   });
 
   final String name;
   final Function() onPress;
   final Function() onTap;
   final bool isChecked;
-  final bool isPlaying;
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +40,7 @@ class RingtoneWidget extends StatelessWidget {
                   child: NeuRoundWidget(
                       size: 40,
                     padding: 8,
-                    child: isPlaying
-                        ? Image.asset('assets/images/note_red.png')
-                        : Image.asset('assets/images/note.png')),
+                    child: Image.asset('assets/images/note.png')),
                 ),
                 GestureDetector(
                   onTap: (){

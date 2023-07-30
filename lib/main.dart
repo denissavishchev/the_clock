@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'models/alarm_model.dart';
 import 'pages/main_page.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(AlarmModelAdapter());
+  await Hive.openBox<AlarmModel>('alarm_page');
   runApp(const MyApp());
 }
 
