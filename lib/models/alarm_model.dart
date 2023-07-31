@@ -17,4 +17,6 @@ class AlarmModel extends HiveObject{
   late bool deleteAfter = false;
   @HiveField(6)
   late String label;
+  @HiveField(7)
+  late bool isActive = true;
 }

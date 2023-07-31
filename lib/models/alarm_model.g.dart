@@ -23,13 +23,14 @@ class AlarmModelAdapter extends TypeAdapter<AlarmModel> {
       ..repeat = fields[3] as String
       ..days = (fields[4] as Map).cast<dynamic, dynamic>()
       ..deleteAfter = fields[5] as bool
-      ..label = fields[6] as String;
+      ..label = fields[6] as String
+      ..isActive = fields[7] as bool;
   }
 
   @override
   void write(BinaryWriter writer, AlarmModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.hour)
       ..writeByte(1)
@@ -43,7 +44,9 @@ class AlarmModelAdapter extends TypeAdapter<AlarmModel> {
       ..writeByte(5)
       ..write(obj.deleteAfter)
       ..writeByte(6)
-      ..write(obj.label);
+      ..write(obj.label)
+      ..writeByte(7)
+      ..write(obj.isActive);
   }
 
   @override

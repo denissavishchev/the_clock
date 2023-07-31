@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:the_clock/models/alarm_model.dart';
 import 'package:the_clock/models/boxes.dart';
-import 'package:the_clock/pages/alarm_page.dart';
 import 'package:the_clock/pages/main_page.dart';
 import 'package:the_clock/widgets/neu_rect_widget.dart';
 import 'package:the_clock/widgets/ringtone_widget.dart';
 import '../constants.dart';
+import '../functions.dart';
 import '../widgets/neu_round_widget.dart';
 import '../widgets/repeat_alarm_widget.dart';
 import 'package:just_audio/just_audio.dart';
@@ -62,22 +62,8 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
         ..days = _daysOfWeek
         ..deleteAfter = _deleteAfter
         ..label = _label;
-
       final box = Boxes.addAlarmToBase();
-      box.put('2', alarms);
-
-  }
-
-  String timeUntil() {
-    DateTime now = DateTime.now();
-    final futureTime = DateTime(now.year, now.month, now.day, hour, minute, now.second,);
-    var timeLeft = futureTime.difference(now).inMinutes;
-    if (timeLeft < 0) {
-      timeLeft = timeLeft + 1440;
-    }
-    final int hourLeft = timeLeft ~/ 60;
-    final int minuteLeft = timeLeft % 60;
-    return '${hourLeft.toString().padLeft(2, '0')}:${minuteLeft.toString().padLeft(2, '0')}';
+      box.add(alarms);
   }
 
   Future repeatWindow() {
@@ -352,13 +338,13 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                           size: 50,
                           padding: 14,
                           child: Image.asset('assets/images/cancel.png')),
-                      Text('Alarm in ${timeUntil()}', style: textStyle,),
+                      Text('Alarm in ${timeUntil(hour, minute)}', style: textStyle,),
                       NeuRoundWidget(
                           onPress: () {
                             addAlarm();
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const AlarmPage()));
+                                MaterialPageRoute(builder: (context) => const MainPage()));
                           },
                           size: 50,
                           padding: 14,
