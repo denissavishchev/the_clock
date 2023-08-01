@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:the_clock/constants.dart';
 import 'package:the_clock/functions.dart';
 import 'package:the_clock/models/alarm_model.dart';
 import 'package:the_clock/pages/add_alarm_page.dart';
@@ -109,72 +110,99 @@ class _AlarmPageState extends State<AlarmPage> {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 24.0),
                               child: NeuRectWidget(
+                                height: 75,
                                 padding: 12,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text('${alarms[index].hour.toString().padLeft(2, '0')}:${alarms[index].minute.toString().padLeft(2, '0')}',
-                                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text('${alarms[index].hour.toString().padLeft(2, '0')}:${alarms[index].minute.toString().padLeft(2, '0')}',
+                                                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                                              ),
+                                              const SizedBox(width: 10,),
+                                              SizedBox(
+                                                width: 150,
+                                                child: Text(alarms[index].label == 'Enter label'
+                                                    ? ''
+                                                    : alarms[index].label.toString(),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: fontColor.withOpacity(0.7)),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 210,
+                                            child: Row(
+                                              children: [
+                                                Text('In ${timeUntil(alarms[index].hour, alarms[index].minute)}'),
+                                                const SizedBox(width: 28,),
+                                                alarms[index].repeat == 'Custom'
+                                                    ? Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: List.generate(activeDays.length, (index) =>
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: 1.0),
+                                                          child: Text(activeDays[index],
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color: fontColor.withOpacity(0.8))),
+                                                      )))
+                                                    : Text(alarms[index].repeat == 'Once'
+                                                    ? ''
+                                                    : alarms[index].repeat,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: fontColor.withOpacity(0.8)),),
+                                              ],
                                             ),
-                                            Text(alarms[index].label == 'Enter label'
-                                                ? ''
-                                                : alarms[index].label.toString(),
-                                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            alarms[index].repeat == 'Custom'
-                                                ? Row(
-                                              children: List.generate(activeDays.length, (index) => Text(activeDays[index])))
-                                                : Text(alarms[index].repeat == 'Once'
-                                                ? ''
-                                                : alarms[index].repeat,
-                                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-                                            Text(timeUntil(alarms[index].hour, alarms[index].minute))
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.white,
-                                                blurRadius: 10,
-                                                offset: Offset(-5, -5)),
-                                            BoxShadow(
-                                                color: Color(0xFFc9d7e6),
-                                                blurRadius: 10,
-                                                offset: Offset(5, 5)),
-                                          ]),
-                                      child: CupertinoSwitch(
-                                          trackColor: const Color(0xffdee8f1),
-                                          thumbColor: const Color(0xff31466a),
-                                          activeColor: const Color(0xFFc9d7e6),
-                                          value: alarms[index].isActive,
-                                          onChanged: (value) {
-                                            if (alarms[index].isActive == false){
-                                              setState(() {
-                                                alarms[index].isActive = true;
-                                                box.putAt(alarms.indexOf(alarms[index]), alarms[index]);
-                                              });
-                                            }else{
-                                              setState(() {
-                                                alarms[index].isActive = false;
-                                                box.putAt(alarms.indexOf(alarms[index]), alarms[index]);
-                                              });
-                                            }
-                                          }),
-                                    )
-                                  ],
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.white,
+                                                  blurRadius: 10,
+                                                  offset: Offset(-5, -5)),
+                                              BoxShadow(
+                                                  color: Color(0xFFc9d7e6),
+                                                  blurRadius: 10,
+                                                  offset: Offset(5, 5)),
+                                            ]),
+                                        child: CupertinoSwitch(
+                                            trackColor: const Color(0xffdee8f1),
+                                            thumbColor: const Color(0xff31466a),
+                                            activeColor: const Color(0xFFc9d7e6),
+                                            value: alarms[index].isActive,
+                                            onChanged: (value) {
+                                              if (alarms[index].isActive == false){
+                                                setState(() {
+                                                  alarms[index].isActive = true;
+                                                  box.putAt(alarms.indexOf(alarms[index]), alarms[index]);
+                                                });
+                                              }else{
+                                                setState(() {
+                                                  alarms[index].isActive = false;
+                                                  box.putAt(alarms.indexOf(alarms[index]), alarms[index]);
+                                                });
+                                              }
+                                            }),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
