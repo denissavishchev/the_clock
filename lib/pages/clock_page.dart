@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:the_clock/widgets/neu_rect_widget.dart';
 import 'package:the_clock/widgets/neu_round_widget.dart';
 import 'package:analog_clock/analog_clock.dart';
-
+import 'package:slide_digital_clock/slide_digital_clock.dart';
+import '../constants.dart';
 import '../widgets/number_painter.dart';
+import 'add timezone_page.dart';
 
-class ClockPage extends StatelessWidget {
+class ClockPage extends StatefulWidget {
   const ClockPage({Key? key}) : super(key: key);
+
+  @override
+  State<ClockPage> createState() => _ClockPageState();
+}
+
+class _ClockPageState extends State<ClockPage> {
+
+  _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddTimeZonePage()),
+    );
+    if (result) {
+      setState((){});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +39,36 @@ class ClockPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Spacer(),
                   NeuRoundWidget(
                       onPress: () {},
                       size: 50,
                       padding: 14,
                       child: Image.asset('assets/images/gear.png')),
+                  DigitalClock(
+                    hourMinuteDigitTextStyle: TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold, color: fontColor.withOpacity(0.8)
+                    ),
+                    secondDigitTextStyle: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+                    colon: const SizedBox(
+                      height: 10,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(Icons.circle, color: Colors.red, size: 3,),
+                          Icon(Icons.circle, color: Colors.red, size: 3,),
+                        ],
+                      ),
+                    ),
+                  ),
+                  NeuRoundWidget(
+                      onPress: () {
+                        _navigateAndDisplaySelection(context);
+                      },
+                      size: 50,
+                      padding: 14,
+                      child: Image.asset('assets/images/add.png')),
                 ],
               ),
             ),
@@ -60,6 +103,30 @@ class ClockPage extends StatelessWidget {
                 ],
               ),
             ),
+            Container(
+              margin: const EdgeInsets.only(top: 35),
+              height: size.height * 0.3,
+              color: const Color(0xffe9f1f9),
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                child: ListView.builder(
+                  itemCount: addedTimeZones.length,
+                    itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: (){},
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 24),
+                        child: NeuRectWidget(
+                          child: Center(
+                            child: Text(addedTimeZones[index]),
+                          ),
+                        ),
+                      ),
+                    );
+                    }
+                ),
+              ),
+            )
           ],
         ),
       ),
