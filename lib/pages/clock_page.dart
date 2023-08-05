@@ -5,7 +5,7 @@ import 'package:analog_clock/analog_clock.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 import '../constants.dart';
 import '../widgets/number_painter.dart';
-import 'add timezone_page.dart';
+import 'add_timezone_page.dart';
 
 class ClockPage extends StatefulWidget {
   const ClockPage({Key? key}) : super(key: key);
@@ -30,6 +30,7 @@ class _ClockPageState extends State<ClockPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xffe9f1f9),
       body: SafeArea(
         child: Column(
@@ -118,7 +119,9 @@ class _ClockPageState extends State<ClockPage> {
                         padding: const EdgeInsets.only(top: 24),
                         child: NeuRectWidget(
                           child: Center(
-                            child: Text(addedTimeZones[index]),
+                            child: Text(addedTimeZones[index].toString().substring(
+                                addedTimeZones[index].toString().indexOf('/', 0) + 1
+                            ),style: textStyle,),
                           ),
                         ),
                       ),
