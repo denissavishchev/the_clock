@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:the_clock/models/boxes.dart';
+import 'package:the_clock/models/clock_model.dart';
 import 'package:the_clock/widgets/neu_rect_widget.dart';
 import 'package:the_clock/widgets/neu_round_widget.dart';
 import 'package:analog_clock/analog_clock.dart';
-import 'package:slide_digital_clock/slide_digital_clock.dart';
 import '../constants.dart';
 import '../widgets/number_painter.dart';
+import '../widgets/time_and_date_widget.dart';
 import 'add_timezone_page.dart';
 
 class ClockPage extends StatefulWidget {
@@ -24,6 +27,51 @@ class _ClockPageState extends State<ClockPage> {
     if (result) {
       setState((){});
     }
+  }
+  Future deleteZone(int index, Box<ClockModel> box) {
+    return showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (context, setState) {
+                return Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: const BoxDecoration(
+                      color: Color(0xffe9f1f9),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                      )
+                  ),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        box.deleteAt(index);
+                        Navigator.of(context).pop();
+                      },
+                      child: NeuRoundWidget(
+                        padding: 14,
+                        size: 50,
+                        child: Image.asset('assets/images/bin_red.png'),
+                      ),
+                    ),
+                  ),
+                );
+              }
+          );
+        });
+  }
+
+  Future<DateTime> setZone(String zone) async {
+    TimeZone timezone = TimeZone(location: 'Berlin', url: zone);
+    await timezone.getTime();
+    var date = (DateTime.parse(timezone.time.toString()));
+
+    print(date);
+
+    return date;
   }
 
   @override
@@ -45,24 +93,7 @@ class _ClockPageState extends State<ClockPage> {
                       size: 50,
                       padding: 14,
                       child: Image.asset('assets/images/gear.png')),
-                  DigitalClock(
-                    hourMinuteDigitTextStyle: TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold, color: fontColor.withOpacity(0.8)
-                    ),
-                    secondDigitTextStyle: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
-                    colon: const SizedBox(
-                      height: 10,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(Icons.circle, color: Colors.red, size: 3,),
-                          Icon(Icons.circle, color: Colors.red, size: 3,),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const TimeAndDateWidget(),
                   NeuRoundWidget(
                       onPress: () {
                         _navigateAndDisplaySelection(context);
@@ -104,32 +135,53 @@ class _ClockPageState extends State<ClockPage> {
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 35),
-              height: size.height * 0.3,
-              color: const Color(0xffe9f1f9),
-              child: ScrollConfiguration(
-                behavior: const ScrollBehavior().copyWith(overscroll: false),
-                child: ListView.builder(
-                  itemCount: addedTimeZones.length,
-                    itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: (){},
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 24),
-                        child: NeuRectWidget(
-                          child: Center(
-                            child: Text(addedTimeZones[index].toString().substring(
-                                addedTimeZones[index].toString().indexOf('/', 0) + 1
-                            ),style: textStyle,),
-                          ),
-                        ),
+            ValueListenableBuilder(
+                valueListenable: Boxes.addClockToBase().listenable(),
+                builder: (context, box, _) {
+                  final zones = box.values.toList().cast<ClockModel>();
+                  return Container(
+                    margin: const EdgeInsets.only(top: 35),
+                    height: size.height * 0.3,
+                    color: const Color(0xffe9f1f9),
+                    child: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(overscroll: false),
+                      child: ListView.builder(
+                          itemCount: zones.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onLongPress: (){
+                                deleteZone(index, box);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 24),
+                                child: NeuRectWidget(
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          // Text(timeDate[index]),
+                                          Text(('${(setZone(zones[index].zone))}')),
+                                          // Text(data[index].toString()),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(zones[index].zone.toString().substring(
+                                              zones[index].zone.toString().indexOf('/', 0) + 1
+                                          ),style: textStyle,),
+                                          Text('+1 ahead'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                       ),
-                    );
-                    }
-                ),
-              ),
-            )
+                    ),
+                  );
+                })
           ],
         ),
       ),

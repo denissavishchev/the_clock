@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:the_clock/models/timezones.dart';
 import '../constants.dart';
+import '../models/boxes.dart';
+import '../models/clock_model.dart';
 import '../widgets/neu_rect_widget.dart';
 import '../widgets/neu_round_widget.dart';
 
@@ -18,24 +20,14 @@ class AddTimeZonePage extends StatefulWidget {
 class _AddTimeZonePageState extends State<AddTimeZonePage> {
 
   String? time = 'loading';
-
-  void setZone() async {
-    TimeZone timezone = TimeZone(location: 'Berlin', url: 'Europe/Berlin');
-    await timezone.getTime();
-    setState(() {
-      time = timezone.time;
-    });
-  }
-
   final List _allZones = timezones;
-
   List _foundZones = [];
 
-  @override
-  void initState() {
-    _foundZones = _allZones;
-    setZone();
-    super.initState();
+  void addZone(String zone) async {
+    final zones = ClockModel()
+      ..zone = zone;
+    final box = Boxes.addClockToBase();
+    box.add(zones);
   }
 
   void _filter(String enteredWord) {
@@ -48,6 +40,12 @@ class _AddTimeZonePageState extends State<AddTimeZonePage> {
     setState(() {
       _foundZones = results;
     });
+  }
+
+  @override
+  void initState() {
+    _foundZones = _allZones;
+    super.initState();
   }
 
   @override
@@ -101,7 +99,7 @@ class _AddTimeZonePageState extends State<AddTimeZonePage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: (){
-                      addedTimeZones.add(_foundZones[index]);
+                      addZone(_foundZones[index]);
                       Navigator.pop(context, true);
                     },
                     child: Container(

@@ -42,6 +42,7 @@ dependencies:
   hive_generator: ^2.0.0
   slide_digital_clock: ^1.0.3
   http: ^1.1.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

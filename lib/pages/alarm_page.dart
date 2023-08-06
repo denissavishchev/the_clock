@@ -8,6 +8,7 @@ import 'package:the_clock/pages/add_alarm_page.dart';
 import '../models/boxes.dart';
 import '../widgets/neu_rect_widget.dart';
 import '../widgets/neu_round_widget.dart';
+import '../widgets/time_and_date_widget.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({Key? key}) : super(key: key);
@@ -72,6 +73,7 @@ class _AlarmPageState extends State<AlarmPage> {
                       size: 50,
                       padding: 14,
                       child: Image.asset('assets/images/gear.png')),
+                  const TimeAndDateWidget(),
                   NeuRoundWidget(
                       onPress: () {
                         Navigator.push(
