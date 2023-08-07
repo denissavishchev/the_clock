@@ -64,19 +64,10 @@ class _ClockPageState extends State<ClockPage> {
         });
   }
 
-  Future<DateTime> setZone(String zone) async {
-    TimeZone timezone = TimeZone(location: 'Berlin', url: zone);
-    await timezone.getTime();
-    var date = (DateTime.parse(timezone.time.toString()));
-
-    print(date);
-
-    return date;
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    DateTime now = DateTime.now();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xffe9f1f9),
@@ -159,9 +150,8 @@ class _ClockPageState extends State<ClockPage> {
                                     children: [
                                       Column(
                                         children: [
-                                          // Text(timeDate[index]),
-                                          Text(('${(setZone(zones[index].zone))}')),
-                                          // Text(data[index].toString()),
+                                          Text(now.add(Duration(hours: int.parse(zones[index].offset) - 2)).toString()),
+                                          Text('${zones[index].zone}'),
                                         ],
                                       ),
                                       Column(
@@ -169,7 +159,7 @@ class _ClockPageState extends State<ClockPage> {
                                           Text(zones[index].zone.toString().substring(
                                               zones[index].zone.toString().indexOf('/', 0) + 1
                                           ),style: textStyle,),
-                                          Text('+1 ahead'),
+                                          Text(((int.parse(zones[index].offset)) - 2).toString()),
                                         ],
                                       ),
                                     ],

@@ -24,8 +24,13 @@ class _AddTimeZonePageState extends State<AddTimeZonePage> {
   List _foundZones = [];
 
   void addZone(String zone) async {
+    TimeZone timezone = TimeZone(location: 'Berlin', url: zone);
+    await timezone.getTime();
+    var offset = timezone.timeOffset;
+
     final zones = ClockModel()
-      ..zone = zone;
+      ..zone = zone
+      ..offset = offset;
     final box = Boxes.addClockToBase();
     box.add(zones);
   }
@@ -124,8 +129,9 @@ class TimeZone {
   String location;
   String? time;
   String url;
+  String timeOffset;
 
-  TimeZone({ required this.location, this.time, required this.url});
+  TimeZone({ required this.location, this.time, required this.url, this.timeOffset = '00'});
 
   Future<void> getTime() async{
     final response = await http.get(Uri.parse('http://worldtimeapi.org/api/timezone/$url'));
@@ -138,5 +144,6 @@ class TimeZone {
     now = now.add(Duration(hours: int.parse(offset)));
 
     time = now.toString();
+    timeOffset = offset.toString();
   }
 }

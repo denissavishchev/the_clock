@@ -8,7 +8,7 @@ part of 'clock_model.dart';
 
 class ClockModelAdapter extends TypeAdapter<ClockModel> {
   @override
-  final int typeId = 4;
+  final int typeId = 36;
 
   @override
   ClockModel read(BinaryReader reader) {
@@ -16,15 +16,19 @@ class ClockModelAdapter extends TypeAdapter<ClockModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ClockModel()..zone = fields[0] as String;
+    return ClockModel()
+      ..zone = fields[0] as String
+      ..offset = fields[7] as String;
   }
 
   @override
   void write(BinaryWriter writer, ClockModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.zone);
+      ..write(obj.zone)
+      ..writeByte(7)
+      ..write(obj.offset);
   }
 
   @override
