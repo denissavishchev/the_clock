@@ -151,7 +151,7 @@ class _ClockPageState extends State<ClockPage> {
                                       Column(
                                         children: [
                                           Text(now.add(Duration(hours: int.parse(zones[index].offset) - 2)).toString()),
-                                          Text('${zones[index].zone}'),
+                                          Text(zones[index].zone),
                                         ],
                                       ),
                                       Column(
