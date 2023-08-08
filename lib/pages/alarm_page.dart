@@ -30,7 +30,7 @@ class _AlarmPageState extends State<AlarmPage> {
                   height: MediaQuery.of(context).size.height * 0.15,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: const BoxDecoration(
-                      color: Color(0xffe9f1f9),
+                      color: backgroundColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(24),
                         topRight: Radius.circular(24),
@@ -45,7 +45,7 @@ class _AlarmPageState extends State<AlarmPage> {
                       child: NeuRoundWidget(
                         padding: 14,
                         size: 50,
-                        child: Image.asset('assets/images/bin_red.png'),
+                        child: Image.asset('assets/images/bin.png'),
                       ),
                     ),
                   ),
@@ -59,7 +59,7 @@ class _AlarmPageState extends State<AlarmPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xffe9f1f9),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -92,7 +92,7 @@ class _AlarmPageState extends State<AlarmPage> {
                 final alarms = box.values.toList().cast<AlarmModel>();
                 return Container(
                   height: size.height * 0.72,
-                  color: const Color(0xffe9f1f9),
+                  color: backgroundColor,
                   child: ScrollConfiguration(
                     behavior: const ScrollBehavior().copyWith(overscroll: false),
                     child: ListView.builder(
@@ -180,14 +180,14 @@ class _AlarmPageState extends State<AlarmPage> {
                                                   blurRadius: 10,
                                                   offset: Offset(-5, -5)),
                                               BoxShadow(
-                                                  color: Color(0xFFc9d7e6),
+                                                  color: shadowColor,
                                                   blurRadius: 10,
                                                   offset: Offset(5, 5)),
                                             ]),
                                         child: CupertinoSwitch(
-                                            trackColor: const Color(0xffdee8f1),
-                                            thumbColor: const Color(0xff31466a),
-                                            activeColor: const Color(0xFFc9d7e6),
+                                            trackColor: trackColor,
+                                            thumbColor: fontColor,
+                                            activeColor: shadowColor,
                                             value: alarms[index].isActive,
                                             onChanged: (value) {
                                               if (alarms[index].isActive == false){

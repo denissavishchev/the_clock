@@ -77,7 +77,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                   height: MediaQuery.of(context).size.height * 0.4,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: const BoxDecoration(
-                      color: Color(0xffe9f1f9),
+                      color: backgroundColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(24),
                         topRight: Radius.circular(24),
@@ -106,7 +106,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
                           color: _repeatAlarm == 'Custom'
-                              ? const Color(0xff31466a).withOpacity(0.1)
+                              ? fontColor.withOpacity(0.1)
                               : Colors.transparent,
                           borderRadius: const BorderRadius.all(Radius.circular(16)),),
                         child: Row(
@@ -131,7 +131,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                                               child: Text(
                                                 _daysOfWeek.keys.toList()[index],
                                                 style: _daysOfWeek.values.toList()[index] && _repeatAlarm == 'Custom'
-                                                    ? helpTextStyle.copyWith(color: Colors.red)
+                                                    ? helpTextStyle.copyWith(color: purple)
                                                     : helpTextStyle,
                                               )),
                                         )),
@@ -172,7 +172,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                   height: MediaQuery.of(context).size.height,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: const BoxDecoration(
-                      color: Color(0xffe9f1f9),
+                      color: backgroundColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(24),
                         topRight: Radius.circular(24),
@@ -224,7 +224,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                       height: MediaQuery.of(context).size.height * 0.2,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       decoration: const BoxDecoration(
-                          color: Color(0xffe9f1f9),
+                          color: backgroundColor,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24),
                             topRight: Radius.circular(24),
@@ -317,7 +317,7 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color(0xffe9f1f9),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -482,14 +482,14 @@ class _AddAlarmPageState extends State<AddAlarmPage> {
                                         blurRadius: 10,
                                         offset: Offset(-5, -5)),
                                     BoxShadow(
-                                        color: Color(0xFFc9d7e6),
+                                        color: shadowColor,
                                         blurRadius: 10,
                                         offset: Offset(5, 5)),
                                   ]),
                               child: CupertinoSwitch(
-                                  trackColor: const Color(0xffdee8f1),
-                                  thumbColor: const Color(0xff31466a),
-                                  activeColor: const Color(0xFFc9d7e6),
+                                  trackColor: trackColor,
+                                  thumbColor: fontColor,
+                                  activeColor: shadowColor,
                                   value: _deleteAfter,
                                   onChanged: (value) {
                                     setState(() {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 
 class NeuRoundWidget extends StatelessWidget {
   const NeuRoundWidget({Key? key,
@@ -27,7 +29,7 @@ class NeuRoundWidget extends StatelessWidget {
         height: size,
         padding: EdgeInsets.all(padding),
         decoration: BoxDecoration(
-          color: const Color(0xFFe3edf7),
+          color: boxColor,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
@@ -36,7 +38,7 @@ class NeuRoundWidget extends StatelessWidget {
               offset: Offset(-distance, -distance)
             ),
             BoxShadow(
-                color: const Color(0xFFc9d7e6),
+                color: shadowColor,
                 blurRadius: blur,
                 offset: Offset(distance, distance)
             ),

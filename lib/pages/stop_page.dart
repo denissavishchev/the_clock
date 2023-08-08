@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_clock/constants.dart';
 import '../widgets/neu_rect_widget.dart';
 import '../widgets/neu_round_widget.dart';
 
@@ -9,7 +10,7 @@ class StopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffe9f1f9),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -53,7 +54,7 @@ class StopPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.red
+                            color: purple
                         ),
                       ),
                     ),

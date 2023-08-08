@@ -5,6 +5,8 @@ import 'package:the_clock/pages/stop_page.dart';
 import 'package:the_clock/pages/timer_page.dart';
 import 'package:hive/hive.dart';
 
+import '../constants.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -70,7 +72,7 @@ class _MainPageState extends State<MainPage> {
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           padding: EdgeInsets.all(_activePage == index ? 3 : 18),
                           decoration: const BoxDecoration(
-                              color: Color(0xFFe3edf7),
+                              color: boxColor,
                               borderRadius: BorderRadius.all(Radius.circular(16)),
                               boxShadow: [
                                 BoxShadow(
@@ -79,7 +81,7 @@ class _MainPageState extends State<MainPage> {
                                     offset: Offset(-10, -10)
                                 ),
                                 BoxShadow(
-                                    color: Color(0xFFc9d7e6),
+                                    color: shadowColor,
                                     blurRadius: 20,
                                     offset: Offset(10, 10)
                                 ),
@@ -90,16 +92,16 @@ class _MainPageState extends State<MainPage> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: const BoxDecoration(
                                 boxShadow: [
-                                  BoxShadow(color: Color(0xFFe3edf7), blurRadius: 1, spreadRadius: 0),
+                                  BoxShadow(color: boxColor, blurRadius: 1, spreadRadius: 0),
                                   BoxShadow(color: Colors.white, blurRadius: 20, spreadRadius: 5),
                                 ],
                                 borderRadius: BorderRadius.all(Radius.circular(16)),
-                                color: Color(0xFFe3edf7),
+                                color: boxColor,
                                 gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Color(0xFFe3edf7),
+                                  boxColor,
                                   Colors.white,
                                 ],
                               ),

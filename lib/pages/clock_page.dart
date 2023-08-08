@@ -39,7 +39,7 @@ class _ClockPageState extends State<ClockPage> {
                   height: MediaQuery.of(context).size.height * 0.15,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: const BoxDecoration(
-                      color: Color(0xffe9f1f9),
+                      color: backgroundColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(24),
                         topRight: Radius.circular(24),
@@ -54,7 +54,7 @@ class _ClockPageState extends State<ClockPage> {
                       child: NeuRoundWidget(
                         padding: 14,
                         size: 50,
-                        child: Image.asset('assets/images/bin_red.png'),
+                        child: Image.asset('assets/images/bin.png'),
                       ),
                     ),
                   ),
@@ -70,7 +70,7 @@ class _ClockPageState extends State<ClockPage> {
     DateTime now = DateTime.now();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xffe9f1f9),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -105,8 +105,9 @@ class _ClockPageState extends State<ClockPage> {
                 width: size.width * 0.5,
                 height: size.width * 0.5,
                 isLive: true,
-                hourHandColor: const Color(0xff31466a).withOpacity(0.7),
-                minuteHandColor: const Color(0xff31466a),
+                hourHandColor: fontColor.withOpacity(0.7),
+                minuteHandColor: fontColor,
+                secondHandColor: purple,
                 showSecondHand: true,
                 numberColor: Colors.black87,
                 showNumbers: false,
@@ -133,7 +134,7 @@ class _ClockPageState extends State<ClockPage> {
                   return Container(
                     margin: const EdgeInsets.only(top: 35),
                     height: size.height * 0.3,
-                    color: const Color(0xffe9f1f9),
+                    color: backgroundColor,
                     child: ScrollConfiguration(
                       behavior: const ScrollBehavior().copyWith(overscroll: false),
                       child: ListView.builder(

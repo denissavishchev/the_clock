@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../widgets/neu_rect_widget.dart';
 import '../widgets/neu_round_widget.dart';
 
@@ -17,7 +18,7 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffe9f1f9),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -61,7 +62,7 @@ class _TimerPageState extends State<TimerPage> {
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.red
+                            color: purple
                         ),
                       ),
                     ),
@@ -88,14 +89,14 @@ class _TimerPageState extends State<TimerPage> {
                               blurRadius: 10,
                               offset: Offset(-5, -5)),
                           BoxShadow(
-                              color: Color(0xFFc9d7e6),
+                              color: shadowColor,
                               blurRadius: 10,
                               offset: Offset(5, 5)),
                         ]),
                     child: CupertinoSwitch(
-                        trackColor: const Color(0xffdee8f1),
-                        thumbColor: const Color(0xff31466a),
-                        activeColor: const Color(0xFFc9d7e6),
+                        trackColor: trackColor,
+                        thumbColor: fontColor,
+                        activeColor: shadowColor,
                         value: _value,
                         onChanged: (value) {
                           setState(() {

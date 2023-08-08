@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class NeuRectWidget extends StatelessWidget {
   const NeuRectWidget({Key? key,
     this.child,
@@ -25,7 +27,7 @@ class NeuRectWidget extends StatelessWidget {
         height: height,
         padding: EdgeInsets.symmetric(horizontal: padding),
         decoration: BoxDecoration(
-            color: const Color(0xFFe3edf7),
+            color: boxColor,
             borderRadius: const BorderRadius.all(Radius.circular(16)),
             boxShadow: [
               BoxShadow(
@@ -34,7 +36,7 @@ class NeuRectWidget extends StatelessWidget {
                   offset: Offset(-distance, -distance)
               ),
               BoxShadow(
-                  color: const Color(0xFFc9d7e6),
+                  color: shadowColor,
                   blurRadius: 20,
                   offset: Offset(distance, distance)
               ),

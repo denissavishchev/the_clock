@@ -23,7 +23,7 @@ class RingtoneWidget extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: isChecked ? const Color(0xff31466a).withOpacity(0.1) : Colors.transparent,
+        color: isChecked ? fontColor.withOpacity(0.1) : Colors.transparent,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: Row(

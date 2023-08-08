@@ -21,15 +21,15 @@ class TimeAndDateWidget extends StatelessWidget {
               fontSize: 30, fontWeight: FontWeight.bold, color: fontColor.withOpacity(0.8)
           ),
           secondDigitTextStyle: const TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+              fontSize: 18, fontWeight: FontWeight.bold, color: purple),
           colon: const SizedBox(
             height: 10,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Icon(Icons.circle, color: Colors.red, size: 3,),
-                Icon(Icons.circle, color: Colors.red, size: 3,),
+                Icon(Icons.circle, color: purple, size: 3,),
+                Icon(Icons.circle, color: purple, size: 3,),
               ],
             ),
           ),

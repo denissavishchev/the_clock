@@ -56,7 +56,7 @@ class _AddTimeZonePageState extends State<AddTimeZonePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xffe9f1f9),
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           const SizedBox(height: 50),
@@ -111,7 +111,7 @@ class _AddTimeZonePageState extends State<AddTimeZonePage> {
                       padding: const EdgeInsets.all(8.0),
                       margin: const EdgeInsets.fromLTRB(24, 12, 24, 0),
                       decoration: BoxDecoration(
-                        color: const Color(0xff31466a).withOpacity(0.1),
+                        color: fontColor.withOpacity(0.1),
                         borderRadius: const BorderRadius.all(Radius.circular(16)),),
                       child: Text(_foundZones[index],style: textStyle,),
                     ),
