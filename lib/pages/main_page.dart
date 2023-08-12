@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
     const TimerPage(),
   ];
 
-  final List _icons = ['alarm', 'clock', 'stop', 'sand'];
+  final List _icons = ['alarm', 'clock', 'stopper', 'sand'];
 
   @override
   Widget build(BuildContext context) {
