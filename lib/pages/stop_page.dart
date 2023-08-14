@@ -26,6 +26,14 @@ class _StopPageState extends State<StopPage> {
 
   List laps = [];
 
+  ScrollController scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    timer!.cancel();
+    super.dispose();
+  }
+
   void stop() {
     timer!.cancel();
     setState(() {
@@ -52,6 +60,10 @@ class _StopPageState extends State<StopPage> {
     setState(() {
       laps.add(lap);
     });
+    scrollController.animateTo(
+        scrollController.position.maxScrollExtent + 50,
+        duration: const Duration(milliseconds: 10),
+        curve: Curves.linear);
   }
 
   void start() {
@@ -80,6 +92,7 @@ class _StopPageState extends State<StopPage> {
       });
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,17 +131,33 @@ class _StopPageState extends State<StopPage> {
             Container(
               height: 350,
               width: 300,
-              color: Colors.grey,
-              child: ListView.builder(
-                itemCount: laps.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      Text('0${index + 1} '),
-                      Text('${laps[index]}'),
-                    ],
-                  );
-                },
+              color: backgroundColor,
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ListView.builder(
+                    controller: scrollController,
+                    shrinkWrap: true,
+                    reverse: true,
+                    itemCount: laps.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: NeuRectWidget(
+                          height: 40,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(index < 9 ? '0${index + 1}' : '${index + 1}', style: helpTextStyle,),
+                              Text('${laps[index]}', style: textStyle,),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
             const SizedBox(

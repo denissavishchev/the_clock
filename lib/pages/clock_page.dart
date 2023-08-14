@@ -133,7 +133,7 @@ class _ClockPageState extends State<ClockPage> {
                   final zones = box.values.toList().cast<ClockModel>();
                   return Container(
                     margin: const EdgeInsets.only(top: 35),
-                    height: size.height * 0.3,
+                    height: size.height * 0.25,
                     color: backgroundColor,
                     child: ScrollConfiguration(
                       behavior: const ScrollBehavior().copyWith(overscroll: false),
@@ -147,23 +147,25 @@ class _ClockPageState extends State<ClockPage> {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 24),
                                 child: NeuRectWidget(
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Text(now.add(Duration(hours: int.parse(zones[index].offset) - 2)).toString()),
-                                          Text(zones[index].zone),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(zones[index].zone.toString().substring(
-                                              zones[index].zone.toString().indexOf('/', 0) + 1
-                                          ),style: textStyle,),
-                                          Text(((int.parse(zones[index].offset)) - 2).toString()),
-                                        ],
-                                      ),
-                                    ],
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(now.add(Duration(hours: int.parse(zones[index].offset) - 2))
+                                            .toString().substring(11, 16),
+                                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: fontColor.withOpacity(0.8)),),
+                                        const Spacer(),
+                                        Text(zones[index].zone.toString().substring(
+                                            zones[index].zone.toString().indexOf('/', 0) + 1
+                                        ),style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: fontColor),),
+                                        const Spacer(),
+                                        Text(((int.parse(zones[index].offset)) - 2) > 0
+                                            ? '+${(int.parse(zones[index].offset)) - 2}'
+                                            : ((int.parse(zones[index].offset)) - 2).toString(),
+                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: purple.withOpacity(0.6))),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
