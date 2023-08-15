@@ -115,7 +115,6 @@ class _StopPageState extends State<StopPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
             NeuRectWidget(
               padding: 12,
               child: Center(
@@ -129,7 +128,7 @@ class _StopPageState extends State<StopPage> {
               height: 30,
             ),
             Container(
-              height: 350,
+              height: MediaQuery.of(context).size.height * 0.4,
               width: 300,
               color: backgroundColor,
               child: ScrollConfiguration(

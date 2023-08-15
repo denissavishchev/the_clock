@@ -133,7 +133,7 @@ class _ClockPageState extends State<ClockPage> {
                   final zones = box.values.toList().cast<ClockModel>();
                   return Container(
                     margin: const EdgeInsets.only(top: 35),
-                    height: size.height * 0.25,
+                    height: size.height * 0.24,
                     color: backgroundColor,
                     child: ScrollConfiguration(
                       behavior: const ScrollBehavior().copyWith(overscroll: false),
