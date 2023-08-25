@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../constants.dart';
 import '../widgets/neu_rect_widget.dart';
 import '../widgets/neu_round_widget.dart';
@@ -12,8 +12,56 @@ class TimerPage extends StatefulWidget {
   State<TimerPage> createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> {
-  bool _value = true;
+class _TimerPageState extends State<TimerPage> with TickerProviderStateMixin{
+
+  late AnimationController _controller;
+
+  bool isPlaying = false;
+
+  double progress = 1.0;
+
+  void notify(){
+    if(countText == '0:00:00') {
+      FlutterRingtonePlayer.playNotification();
+    }
+  }
+
+  String get countText{
+    Duration count = _controller.duration! * _controller.value;
+    return _controller.isDismissed
+            ? '${_controller.duration!.inHours}:${(_controller.duration!.inMinutes % 60).toString()
+        .padLeft(2, '0')}:${(_controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
+            : '${count.inHours}:${(count.inMinutes % 60).toString()
+        .padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 60));
+
+    _controller.addListener(() {
+      notify();
+      if(_controller.isAnimating){
+        setState(() {
+          progress = _controller.value;
+        });
+      }else{
+        setState(() {
+          progress = 1.0;
+          setState(() {
+            isPlaying = false;
+          });
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +81,91 @@ class _TimerPageState extends State<TimerPage> {
                       size: 50,
                       padding: 14,
                       child: Image.asset('assets/images/gear.png')),
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size. height * 0.5,
+              color: shadowColor,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 300,
+                          height: 300,
+                          child: CircularProgressIndicator(
+                            value: progress,
+                            backgroundColor: purple,
+                            strokeWidth: 10,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            if(_controller.isDismissed){
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (context){
+                                    return SizedBox(
+                                      height: 300,
+                                      child: CupertinoTimerPicker(
+                                        initialTimerDuration: _controller.duration!,
+                                        onTimerDurationChanged: (time){
+                                          setState(() {
+                                            _controller.duration = time;
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  });
+                            }
+                          },
+                          child: AnimatedBuilder(
+                            animation: _controller,
+                            builder: (context, child) {
+                              return Text(countText);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: (){
+                            if(_controller.isAnimating){
+                              _controller.stop();
+                              setState(() {
+                                isPlaying = false;
+                              });
+                            }else{
+                              _controller.reverse(from: _controller.value == 0
+                                  ? 1.0
+                                  : _controller.value);
+                              setState(() {
+                                isPlaying = true;
+                              });
+                            }
+                          },
+                          icon: isPlaying
+                                  ? const Icon(Icons.pause, size: 50,)
+                                  : const Icon(Icons.play_arrow, size: 50,)),
+                      IconButton(
+                          onPressed: (){
+                            _controller.reset();
+                            setState(() {
+                              isPlaying = false;
+                            });
+                          },
+                          icon: const Icon(Icons.stop, size: 50,)),
+                    ],
+                  ),
+                  const SizedBox(height: 12,)
                 ],
               ),
             ),
@@ -69,74 +202,6 @@ class _TimerPageState extends State<TimerPage> {
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 20),
-            NeuRectWidget(
-              padding: 12,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    '5:30',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.white,
-                              blurRadius: 10,
-                              offset: Offset(-5, -5)),
-                          BoxShadow(
-                              color: shadowColor,
-                              blurRadius: 10,
-                              offset: Offset(5, 5)),
-                        ]),
-                    child: CupertinoSwitch(
-                        trackColor: trackColor,
-                        thumbColor: fontColor,
-                        activeColor: shadowColor,
-                        value: _value,
-                        onChanged: (value) {
-                          setState(() {
-                            _value = value;
-                          });
-                        }),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            NeuRectWidget(
-              padding: 12,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        '1',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Lap',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black.withOpacity(0.4)),
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    '00:60:00',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

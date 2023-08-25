@@ -20,7 +20,7 @@ class _StopPageState extends State<StopPage> {
   String digitMinutes = '00';
   String digitHours = '00';
 
-  Timer? timer;
+  Timer timer = Timer.periodic(const Duration(seconds: 1), (timer){});
 
   bool started = false;
 
@@ -30,19 +30,19 @@ class _StopPageState extends State<StopPage> {
 
   @override
   void dispose() {
-    timer!.cancel();
+      timer.cancel();
     super.dispose();
   }
 
   void stop() {
-    timer!.cancel();
+      timer.cancel();
     setState(() {
       started = false;
     });
   }
 
   void reset() {
-    timer!.cancel();
+    timer.cancel();
     setState(() {
       seconds = 0;
       minutes = 0;
