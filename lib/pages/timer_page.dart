@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../constants.dart';
-import '../widgets/neu_rect_widget.dart';
 import '../widgets/neu_round_widget.dart';
 
 class TimerPage extends StatefulWidget {
@@ -86,58 +85,81 @@ class _TimerPageState extends State<TimerPage> with TickerProviderStateMixin{
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size. height * 0.5,
-              color: shadowColor,
+              height: MediaQuery.of(context).size. height * 0.7,
+              color: backgroundColor,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 300,
-                          height: 300,
-                          child: CircularProgressIndicator(
-                            value: progress,
-                            backgroundColor: purple,
-                            strokeWidth: 10,
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      NeuRoundWidget(
+                          size: 320,
+                          distance: 10,
+                          blur: 20,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: boxColor, blurRadius: 5),
+                              BoxShadow(color: Colors.white, blurRadius: 20, spreadRadius: 5),
+                            ],
+                            borderRadius: BorderRadius.all(Radius.circular(160)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                boxColor,
+                                Colors.white,
+                              ],
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: (){
-                            if(_controller.isDismissed){
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (context){
-                                    return SizedBox(
-                                      height: 300,
-                                      child: CupertinoTimerPicker(
-                                        initialTimerDuration: _controller.duration!,
-                                        onTimerDurationChanged: (time){
-                                          setState(() {
-                                            _controller.duration = time;
-                                          });
-                                        },
-                                      ),
-                                    );
-                                  });
-                            }
+                      ),
+                      SizedBox(
+                        width: 280,
+                        height: 280,
+                        child: CircularProgressIndicator(
+                          value: 1 - progress,
+                          backgroundColor: backgroundColor,
+                          strokeWidth: 20,
+                          color: purple,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          if(_controller.isDismissed){
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context){
+                                  return SizedBox(
+                                    height: 300,
+                                    child: CupertinoTimerPicker(
+                                      initialTimerDuration: _controller.duration!,
+                                      onTimerDurationChanged: (time){
+                                        setState(() {
+                                          _controller.duration = time;
+                                        });
+                                      },
+                                    ),
+                                  );
+                                });
+                          }
+                        },
+                        child: AnimatedBuilder(
+                          animation: _controller,
+                          builder: (context, child) {
+                            return Text(countText, style: timeStyle,);
                           },
-                          child: AnimatedBuilder(
-                            animation: _controller,
-                            builder: (context, child) {
-                              return Text(countText);
-                            },
-                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      IconButton(
-                          onPressed: (){
+                      NeuRoundWidget(
+                          onPress: () {
                             if(_controller.isAnimating){
                               _controller.stop();
                               setState(() {
@@ -152,56 +174,25 @@ class _TimerPageState extends State<TimerPage> with TickerProviderStateMixin{
                               });
                             }
                           },
-                          icon: isPlaying
-                                  ? const Icon(Icons.pause, size: 50,)
-                                  : const Icon(Icons.play_arrow, size: 50,)),
-                      IconButton(
-                          onPressed: (){
+                          size: 50,
+                          padding: 14,
+                          child: Image.asset(isPlaying
+                              ? 'assets/images/pause.png'
+                              : 'assets/images/play.png')),
+                      NeuRoundWidget(
+                          onPress: () {
                             _controller.reset();
                             setState(() {
                               isPlaying = false;
                             });
                           },
-                          icon: const Icon(Icons.stop, size: 50,)),
+                          size: 50,
+                          padding: 14,
+                          child: Image.asset('assets/images/stop.png')),
                     ],
                   ),
-                  const SizedBox(height: 12,)
                 ],
               ),
-            ),
-            const SizedBox(height: 30),
-            const Row(
-              children: [
-                Expanded(
-                  child: NeuRectWidget(
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        'Start',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: NeuRectWidget(
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        'Reset',
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: purple
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
