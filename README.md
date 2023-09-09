@@ -1,16 +1,7 @@
-# the_clock
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot_2023-09-09-14-13-30-915_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/eaa32032-ca5b-42a1-a4a7-2d6defdd5102)
+![Screenshot_2023-09-09-14-13-46-165_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/e078b30b-09f8-4a1b-b084-eb17fa6ca24b)
+![Screenshot_2023-09-09-14-14-08-979_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/ce36a95f-9393-4500-bbe4-187d8c81c719)
+![Screenshot_2023-09-09-14-14-22-720_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/73ade5a9-dbe3-4239-94f7-ac1691c32da0)
+![Screenshot_2023-09-09-14-14-40-816_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/4fef6808-2215-4f8c-82e1-89544d6cab2b)
+![Screenshot_2023-09-09-14-14-56-752_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/5b97ef66-886f-4e78-bce4-79ff6427b4ca)
+![Screenshot_2023-09-09-14-15-09-614_com example the_clock](https://github.com/denissavishchev/the_clock/assets/77541683/2ce8f442-101f-454e-a3d3-835acb863782)
