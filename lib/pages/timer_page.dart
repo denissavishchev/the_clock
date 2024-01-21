@@ -14,7 +14,7 @@ class TimerPage extends StatefulWidget {
 class _TimerPageState extends State<TimerPage> with TickerProviderStateMixin{
 
   late AnimationController _controller;
-
+ 
   bool isPlaying = false;
 
   double progress = 1.0;
